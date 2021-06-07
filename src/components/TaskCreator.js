@@ -9,10 +9,15 @@ export const TaskCreator = props => {
   const createNewTask = (e) => {
   	e.preventDefault();
 
-    setNewTaskName('');
-    setDesc("");
+   if(setNewTaskName.length > 0){
+      setNewTaskName('');
+      setDesc("");
 
-    props.callback(newTaskName, desc );
+      props.callback(newTaskName, desc );
+
+   }
+
+   
     
   }
 

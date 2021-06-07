@@ -40,7 +40,7 @@ function App() {
     taskItems
       .filter(task => task.completed === doneValue)
       .map(task => (
-        <TaskRow key={task.name} task={task} toggleTask={toggleTask} />
+        <TaskRow key={task.name} task={task} toggleTask={toggleTask} removeTask={removeTask}/>
       ));
 
   const createNewTask = (taskName) => {
@@ -49,6 +49,12 @@ function App() {
     }
   };
 
+
+  const removeTask = (taskName) => {
+    console.log(taskName);
+     const newList = taskItems.filter((item) => item.name !== taskName);
+      setTaskItems(newList);
+  };
 
 
   return (
@@ -59,9 +65,9 @@ function App() {
       <div className="row">
         <div className="col-md-6" > 
           <TaskBanner taskItems={taskItems} />
-          <table className="table table-striped table-bordered">
-            <tbody>{taskTableRows(false)}</tbody>
-          </table>
+         
+           {taskTableRows(false)}
+      
 
         <div className="bg-secondary text-white text-center p-2">
           <VisibilityControl
@@ -72,9 +78,9 @@ function App() {
           />
         </div>
         {showCompleted && (
-          <table className="table table-striped table-bordered">
-            <tbody>{taskTableRows(true)}</tbody>
-          </table>
+         
+            <div>{taskTableRows(true)}</div>
+
         )}
 
         </div>
