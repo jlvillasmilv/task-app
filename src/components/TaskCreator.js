@@ -1,24 +1,19 @@
 import React, { useState } from "react";
 
-export const TaskCreator = props => {
-  const [newTaskName, setNewTaskName] = useState("");
+function  TaskCreator ({ task, createNewTask }) {
+  const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
 
-  const updateNewTaskValue = e => setNewTaskName(e.target.value);
-
-  const createNewTask = (e) => {
+  const onCreateNewTask = (e) => {
   	e.preventDefault();
 
-   if(setNewTaskName.length > 0){
-      setNewTaskName('');
-      setDesc("");
+     if(setName.length > 0){
+        createNewTask({ desc: desc, name: name });
+        setName("");
+        setDesc("");
 
-      props.callback(newTaskName, desc );
+     }
 
-   }
-
-   
-    
   }
 
   return (
@@ -29,19 +24,24 @@ export const TaskCreator = props => {
 		   className="form-control"
 		   type="text"
 		   id="name"
-           value={newTaskName}
-           onChange={updateNewTaskValue}
+           value={name}
+           onChange={(e) => setName(e.target.value)}
 		   />
 		</div>
 		<div className="mb-3">
 		  <label htmlFor="description" className="form-label">Description</label>
-		  <textarea className="form-control" id="description" rows="3" value={desc} onChange={(e) => setDesc(e.target.value)}></textarea>
+		  <textarea className="form-control"
+       id="description"
+        rows="3"
+         value={desc} onChange={(e) => setDesc(e.target.value)}></textarea>
 		</div>
 
      
-      <button className="btn btn-primary mt-1" onClick={createNewTask}>
+      <button className="btn btn-primary mt-1" onClick={onCreateNewTask}>
         Add
       </button>
     </div>
   );
 };
+
+export default TaskCreator  ;

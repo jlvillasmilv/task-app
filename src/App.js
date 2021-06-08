@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { TaskRow } from "./components/TaskRow";
 import { TaskBanner } from "./components/TaskBanner";
-import { TaskCreator } from "./components/TaskCreator";
+import  TaskCreator  from "./components/TaskCreator";
+import  TaskEditor  from "./components/TaskEditor";
 import { VisibilityControl } from "./components/VisibilityControl";
  
 function App() {
 
   const [taskItems, setTaskItems] = useState([
-    {name: 'Tasks One', description: '', completed: false},
-    {name: 'Tasks Two', description: '', completed: false},
-    {name: 'Tasks Three', description: '', completed: true},      
+    {id: 1, name: 'Tasks One', description: '', completed: false},
+    {id: 2, name: 'Tasks Two', description: '', completed: false},
+    {id: 3, name: 'Tasks Three', description: '', completed: true},      
   ]);
 
   const [showCompleted, setshowCompleted] = useState(true);
+  const [editing, setEditing] = useState(false)
+  const initialFormState = { id: null, name: '', description: '' }
+  const [ currentTask, setCurrentTask ] = useState(initialFormState)
 
   useEffect(() => {
     let data = localStorage.getItem("tasks");
@@ -40,25 +44,40 @@ function App() {
     taskItems
       .filter(task => task.completed === doneValue)
       .map(task => (
-        <TaskRow key={task.name} task={task} toggleTask={toggleTask} removeTask={removeTask}/>
+        <TaskRow editRow={editRow} key={task.id} task={task} toggleTask={toggleTask} removeTask={removeTask}/>
       ));
 
-  const createNewTask = (taskName) => {
-    if (!taskItems.find(t => t.name === taskName)) {
-      setTaskItems([...taskItems, { name: taskName, description: '', completed: false }]);
+
+  const createNewTask = ({name, desc}) => {
+    console.log(name+''+desc)
+    if (!taskItems.find(t => t.name === name)) {
+      setTaskItems([...taskItems, {id: Date.now(), name: name, description: desc, completed: false }]);
     }
   };
 
 
+  const updateTask = (id, updatedTask) => {
+    setEditing(false)
+
+    setTaskItems(taskItems.map(t => (t.id === id ? updatedTask : t)))
+  }
+
+  const editRow = task => {
+    setEditing(true)
+
+    setCurrentTask({ id: task.id, name: task.name, description: task.description })
+  }
+
+
   const removeTask = (taskName) => {
-    console.log(taskName);
-     const newList = taskItems.filter((item) => item.name !== taskName);
+    //console.log(taskName);
+     const newList = taskItems.filter((item) => item.id !== taskName);
       setTaskItems(newList);
   };
 
 
   return (
-    <div className="App">
+    <div className="App container-fluid">
 
      
 
@@ -85,7 +104,15 @@ function App() {
 
         </div>
 
-       <div className="col-md-6" >  <TaskCreator callback={createNewTask} /> </div>
+       <div className="col-md-6" >
+          {editing ? (
+
+            <TaskEditor task={currentTask} setEditing={setEditing} updateTask={updateTask} />
+
+          ) : (
+            <TaskCreator task={{}} createNewTask={createNewTask} />
+          )}
+       </div>
 
       </div>
 
