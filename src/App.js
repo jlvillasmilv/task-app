@@ -15,7 +15,7 @@ function App() {
 
   const [showCompleted, setshowCompleted] = useState(true);
   const [editing, setEditing] = useState(false)
-  const initialFormState = { id: null, name: '', description: '' }
+  const initialFormState = { id: null, name: '', description: '', completed: false }
   const [ currentTask, setCurrentTask ] = useState(initialFormState)
 
   useEffect(() => {
@@ -58,14 +58,17 @@ function App() {
 
   const updateTask = (id, updatedTask) => {
     setEditing(false)
-
-    setTaskItems(taskItems.map(t => (t.id === id ? updatedTask : t)))
+    console.log(updatedTask)
+      setTaskItems(taskItems.map(t => (t.id === id ? updatedTask : t)))
   }
 
   const editRow = task => {
     setEditing(true)
 
-    setCurrentTask({ id: task.id, name: task.name, description: task.description })
+    setCurrentTask({ id: task.id, name: task.name,
+        description: task.description,
+        completed: task.completed
+    })
   }
 
 
