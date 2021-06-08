@@ -48,12 +48,15 @@ function App() {
       ));
 
 
-  const createNewTask = ({name, desc}) => {
-    console.log(name+''+desc)
-    if (!taskItems.find(t => t.name === name)) {
-      setTaskItems([...taskItems, {id: Date.now(), name: name, description: desc, completed: false }]);
+  const createNewTask = task => {
+
+    if (!taskItems.find(t => t.name === task.name)) {
+      task.id = Date.now()
+      setTaskItems([...taskItems, task]);
     }
   };
+
+   
 
 
   const updateTask = (id, updatedTask) => {
