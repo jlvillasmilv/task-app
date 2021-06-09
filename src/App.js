@@ -61,8 +61,7 @@ function App() {
 
   const updateTask = (id, updatedTask) => {
     setEditing(false)
-    console.log(updatedTask)
-      setTaskItems(taskItems.map(t => (t.id === id ? updatedTask : t)))
+    setTaskItems(taskItems.map(t => (t.id === id ? updatedTask : t)))
   }
 
   const editRow = task => {
@@ -113,10 +112,16 @@ function App() {
        <div className="col-md-6" >
           {editing ? (
 
-            <TaskEditor task={currentTask} setEditing={setEditing} updateTask={updateTask} />
+            <TaskCreator task={currentTask} 
+            editing={true} 
+            setEditing={setEditing}
+             createNewTask={updateTask} />
 
           ) : (
-            <TaskCreator task={{}} createNewTask={createNewTask} />
+            <TaskCreator task={currentTask}
+             editing={false}
+              setEditing={setEditing}
+              createNewTask={createNewTask} />
           )}
        </div>
 

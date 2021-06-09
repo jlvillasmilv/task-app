@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
   const TaskCreator = props => {
-    const initialFormState = { id: null, name: '', description: '', completed: false }
-    const [ usetask, setTask ] = useState(initialFormState)
+  const initialFormState = { id: null, name: '', description: '', completed: false }
+  const [ usetask, setTask ] = useState(initialFormState)
   
     const handleInputChange = event => {
       const { name, value } = event.target
@@ -10,15 +10,24 @@ import React, { useState } from "react";
       setTask({ ...usetask, [name]: value })
     }
 
+  const onCancel = (e) => {
+    e.preventDefault();
+    
+    props.setEditing(false);
+  }
+
+  useEffect( () => { 
+    (props.editing) ? setTask(props.task) : setTask(initialFormState) 
+  },  [ props ] )
+
   return (
 
     <form
 			onSubmit={event => {
 				event.preventDefault()
 				if (!usetask.name || !usetask.description) return
-
-				props.createNewTask(usetask)
-				setTask(initialFormState)
+         (props.editing) ? props.createNewTask(usetask.id, usetask) :  props.createNewTask(usetask)
+				  setTask(initialFormState)
 			}}>
 
         <div className="my-1">
@@ -39,7 +48,11 @@ import React, { useState } from "react";
                       rows="3"
                       value={usetask.description} onChange={handleInputChange} ></textarea>
           </div>        
-          <button className="btn btn-primary mt-1" > Add </button>
+          <button className="btn btn-primary mt-1" > {(props.editing ? 'Update' : 'Add' )} </button>
+          <button onClick={onCancel}
+           className={"btn btn-secondary mt-1 mx-1 "+(props.editing ? '' : 'd-none' )}>
+            Cancel
+          </button>
         </div>
     </form>
   )
